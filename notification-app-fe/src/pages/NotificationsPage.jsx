@@ -1,26 +1,23 @@
 import {
-  Alert,
-  Badge,
-  Box,
-  CircularProgress,
-  Divider,
-  Stack,
-  Typography,
-  Pagination
+Alert,
+Badge,
+Box,
+CircularProgress,
+Divider,
+Stack,
+Typography
 } from "@mui/material";
 
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useState } from "react";
 
 import { NotificationCard } from "../components/NotificationCard";
 import { NotificationFilter } from "../components/NotificationFilter";
 import { useNotifications } from "../hooks/useNotifications";
 
-import { useState } from "react";
-
-export function NotificationsPage() {
+export function NotificationsPage(){
 
 const [filter,setFilter]=useState("All");
-const [page,setPage]=useState(1);
 
 const {
 notifications,
@@ -28,7 +25,7 @@ loading,
 error
 }=useNotifications();
 
-const filteredNotifications=
+const filteredNotifications =
 filter==="All"
 ? notifications
 : notifications.filter(
@@ -37,29 +34,17 @@ filter==="All"
 
 return(
 
-<Box sx={{
-maxWidth:720,
-mx:"auto",
-p:4
-}}>
+<Box sx={{maxWidth:720,mx:"auto",p:4}}>
 
-<Stack
-direction="row"
-spacing={2}
-alignItems="center"
->
-
+<Stack direction="row" spacing={2}>
 <Badge
-badgeContent={notifications.length}
+badgeContent={filteredNotifications.length}
 color="primary"
 >
 <NotificationsIcon/>
 </Badge>
 
-<Typography
-variant="h5"
-fontWeight={700}
->
+<Typography variant="h5">
 Notifications
 </Typography>
 
@@ -72,54 +57,33 @@ Notifications
 <NotificationFilter
 value={filter}
 onChange={(e,newValue)=>{
-
 if(newValue){
 setFilter(newValue);
 }
-
 }}
 />
 
 </Box>
 
 {loading && (
-
-<Box
-textAlign="center"
-py={4}
->
-
+<Box textAlign="center">
 <CircularProgress/>
-
 </Box>
-
 )}
 
 {error && (
-
 <Alert severity="error">
-
 {error}
-
 </Alert>
-
 )}
 
-{!loading &&
-!error &&
-filteredNotifications.length===0 && (
-
+{!loading && filteredNotifications.length===0 && (
 <Alert severity="info">
-
 No notifications found
-
 </Alert>
-
 )}
 
-{!loading &&
-!error &&
-filteredNotifications.length>0 && (
+{!loading && filteredNotifications.length>0 && (
 
 <Stack spacing={2}>
 
@@ -135,22 +99,6 @@ notification={n}
 </Stack>
 
 )}
-
-<Box
-display="flex"
-justifyContent="center"
-mt={4}
->
-
-<Pagination
-count={1}
-page={page}
-onChange={(e,value)=>
-setPage(value)
-}
-/>
-
-</Box>
 
 </Box>
 
