@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchNotifications } from "../apis/notifications";
+import { fetchNotifications } from "../api/notifications";
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState([]);
@@ -7,14 +7,23 @@ export function useNotifications() {
 
   useEffect(() => {
     const load = async () => {
-      const data = await fetchNotifications();
-      setNotifications(data.notifications ?? []);
+      try {
+        const data = await fetchNotifications();
+        setNotifications(data.notifications || []);
+        setTotal(data.notifications?.length || 0);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
     load();
-  }, [notifications]);
+  }, []);
 
-  const totalPages = 0;
-
-  return { notifications, total, totalPages, loading: false, error: true };
+  return {
+    notifications,
+    total,
+    totalPages: 1,
+    loading: false,
+    error: null,
+  };
 }
