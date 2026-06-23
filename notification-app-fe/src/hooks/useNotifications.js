@@ -1,70 +1,44 @@
-import { useState, useEffect } from "react";
-import { fetchNotifications } from "../api/notifications";
+import {useEffect,useState} from "react";
+import {fetchNotifications} from "../api/notifications";
 
-export function useNotifications() {
+export function useNotifications(){
 
 const [notifications,setNotifications]=useState([]);
 const [loading,setLoading]=useState(true);
-const [error,setError]=useState(null);
+const [error,setError]=useState("");
 
 useEffect(()=>{
 
-const load=async()=>{
+const loadData=async()=>{
 
 try{
 
 setLoading(true);
 
-const data=await fetchNotifications();
+const data=await fetchNotifications(
+1,
+20,
+""
+);
 
-const weights={
-Placement:3,
-Result:2,
-Event:1
-};
+setNotifications(data.notifications);
 
-const top10=(data.notifications || [])
-.sort((a,b)=>{
+}catch(error){
 
-if(weights[a.Type]!==weights[b.Type]){
-
-return weights[b.Type]
--
-weights[a.Type];
+setError("Failed to fetch");
 
 }
-
-return new Date(b.Timestamp)
--
-new Date(a.Timestamp);
-
-})
-.slice(0,10);
-
-setNotifications(top10);
-
-}
-catch(err){
-
-console.log(err);
-setError(err.message);
-
-}
-finally{
 
 setLoading(false);
 
-}
-
 };
 
-load();
+loadData();
 
 },[]);
 
 return{
 notifications,
-totalPages:1,
 loading,
 error
 };
