@@ -1,5 +1,30 @@
-import { NotificationsPage } from "./pages/NotificationsPage";
+import {BrowserRouter,Routes,Route} from "react-router-dom";
 
-export default function App() {
-  return <NotificationsPage />;
+import {NotificationsPage} from "./pages/NotificationsPage";
+import {PriorityNotificationsPage} from "./pages/PriorityNotificationsPage";
+
+export default function App(){
+
+return(
+
+<BrowserRouter>
+
+<Routes>
+
+<Route
+path="/"
+element={<NotificationsPage/>}
+/>
+
+<Route
+path="/priority"
+element={<PriorityNotificationsPage/>}
+/>
+
+</Routes>
+
+</BrowserRouter>
+
+);
+
 }
